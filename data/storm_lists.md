@@ -142,5 +142,5 @@ sample_id, storm_uid, t0, target_time, split, horizon_h
 CMA-2020-01_20200613T18, CMA-2020-01, 2020-06-13T18:00:00, 2020-06-14T00:00:00, train, 6
 ```
 
-where `<i>t</i><sub>0</sub>` is the initialization timestamp of the sample and `target_time` is `<i>t</i><sub>0</sub> + <i>H</i>`
+where <i>t</i><sub>0</sub> is the initialization timestamp of the sample and `target_time` is <i>t</i><sub>0</sub> + <i>H</i> 
 for the corresponding forecast horizon.
