@@ -1,0 +1,8 @@
+# Tested reference environment: Python 3.10, PyTorch 2.0.1, CUDA 11.8.
+numpy>=1.24,<2.0
+pandas>=1.5
+matplotlib>=3.7
+torch==2.0.1
+xarray>=2023.1
+h5netcdf>=1.1
+h5py>=3.8
