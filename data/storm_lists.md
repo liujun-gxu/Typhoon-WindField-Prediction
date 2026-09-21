@@ -1,12 +1,12 @@
 # Storm Lists and Sample Counts
 
 This file provides the exact train/validation/test tropical-cyclone identities and the
-corresponding fixed-$t_0$ sample counts for the 6-, 12-, and 24-h forecasting tasks, as used by
+corresponding fixed-<i>t</i><sub>0</sub> sample counts for the 6-, 12-, and 24-h forecasting tasks, as used by
 the experiments reported in the manuscript
 *Multi-Horizon Typhoon Wind Field Prediction via a Lightweight CNN-LSTM Network: Error Growth and
 Cross-Year Robustness at 6-24 h Lead Times* (Atmosphere). It corresponds to **Table S1 of the
 Supplementary Materials**. Storm identities and sample counts were extracted directly from the
-metadata CSV files used by the fixed-$t_0$ experiments. The partition follows Section 4.1 of the
+metadata CSV files used by the fixed-<i>t</i><sub>0</sub> experiments. The partition follows Section 4.1 of the
 main text: no tropical cyclone case is shared among the training, validation, and testing subsets.
 A value of 0 indicates that no usable sample from the corresponding storm is available for that
 forecast horizon. For the 24-h forecasting task, only 23 of the 24 validation storms contribute usable samples (CMA-2022-07 contributes none), consistent with the per-horizon storm counts in Table 2 of the main text.
@@ -130,3 +130,11 @@ forecast horizon. For the 24-h forecasting task, only 23 of the 24 validation st
 | CMA-2023-20 | 2317 | Jelawat | 9 | 8 | 6 |
 
 **Subtotal (2023): 18 storms | 490 (6 h) | 480 (12 h) | 456 (24 h)
+
+## Per-sample indices
+
+Per-sample indices (`sample_id`, `storm_uid`, `t0`, `target_time`) are not distributed
+directly, but are reconstructed deterministically by `data_processing/prepare_tracks.py`
+from the storm lists given here. The training pipeline emits one metadata CSV per split
+with exactly these columns (see the `test_predictions_metadata.csv` produced by the
+training scripts for the format).
