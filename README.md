@@ -4,7 +4,7 @@ This repository is the code-only public release accompanying the *Atmosphere* pa
 "Multi-Horizon Typhoon Wind Field Prediction via a Lightweight CNN-LSTM Network:
 Error Growth and Cross-Year Robustness at 6-24 h Lead Times".
 
-It contains the core models, the fixed-$t_{0}$ sample-construction logic, training and
+It contains the core models, the fixed-<i>t</i><sub>0</sub> sample-construction logic, training and
 evaluation scripts, statistical-analysis code, and the plotting scripts used to produce
 the figures of the manuscript. It **does not** contain raw data, model weights,
 prediction outputs, or other large artifacts; the ERA5 and CMA data are publicly
