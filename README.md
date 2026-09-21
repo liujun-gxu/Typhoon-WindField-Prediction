@@ -4,7 +4,7 @@ This repository is the code-only public release accompanying the *Atmosphere* pa
 "Multi-Horizon Typhoon Wind Field Prediction via a Lightweight CNN-LSTM Network:
 Error Growth and Cross-Year Robustness at 6-24 h Lead Times".
 
-It contains the core models, the fixed-t0 sample-construction logic, training and
+It contains the core models, the fixed-$t_{0}$ sample-construction logic, training and
 evaluation scripts, statistical-analysis code, and the plotting scripts used to produce
 the figures of the manuscript. It **does not** contain raw data, model weights,
 prediction outputs, or other large artifacts; the ERA5 and CMA data are publicly
@@ -13,7 +13,7 @@ Center, respectively.
 
 ## Task
 
-Predict a local 31 x 31 two-component ($u_{10}$/$v_{10}$) wind field at 6 h, 12 h, or 24 h from
+Predict a local 31 x 31 two-component ($u_{10}$ / $v_{10}$) wind field at 6 h, 12 h, or 24 h from
 four historical hourly patches. The target is defined as $Y_H = W(t_0 + H, C(t_0))$: the
 future ERA5 wind field is sampled on the geographic window anchored at the
 initialization-time storm center, not at the future storm center, thereby avoiding
@@ -22,7 +22,7 @@ future best-track leakage.
 ## Data sources
 
 - CMA best-track data
-- ERA5 reanalysis $u_{10}$/$v_{10}$ wind fields
+- ERA5 reanalysis $u_{10}$ / $v_{10}$ wind fields
 
 No ERA5, CMA, model checkpoint, prediction NPZ, or manuscript result file is included
 in this repository.
