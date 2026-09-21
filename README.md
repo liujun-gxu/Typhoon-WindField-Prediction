@@ -59,7 +59,7 @@ pip install -r requirements.txt
 ## Data preparation
 
 1. Download the ERA5 10-m wind components and the CMA best-track archive.
-2. Use `data_processing/` to build the fixed-t0 NPZ datasets.
+2. Use `data_processing/` to build the fixed-<i>t</i><sub>0</sub> NPZ datasets.
 3. See `data/README.md` for the expected file layout.
 
 ## Training
@@ -74,14 +74,14 @@ were used for the ablation study in Section 5.4; run `train.py` once per seed wi
 ## Evaluation
 
 `evaluation/evaluate.py` computes RMSE, MAE, and WS-MAE from prediction NPZ files.
-`evaluation/paired_ttest.py` reproduces the paired two-sided Student's t-tests
+`evaluation/paired_ttest.py` reproduces the paired two-sided Student's <i>t</i>-tests
 reported in Table 11 from per-seed test errors.
 
 ## Figures
 
 The plotting scripts in `visualization/` correspond to the manuscript figures:
 
-- `figure1_fixed_t0_target_definition.py` — Figure 1 (fixed-t0 target construction)
+- `figure1_fixed_t0_target_definition.py` — Figure 1 (fixed-<i>t</i><sub>0</sub> target construction)
 - `figure3_lead_time_error_curve.py` — Figure 3 (lead-time-dependent error growth)
 - `figure4_baselines.py` — Figure 4 (comparison with reference baselines)
 - `figure5_spatial_error_maps.py` — Figure 5 (spatial error characteristics)
