@@ -1,8 +1,8 @@
 # Typhoon Wind Field Prediction — Code Release
 
-This repository is the code-only public release accompanying the *Atmosphere* paper 
-"Multi-Horizon Typhoon Wind Field Prediction via a Lightweight CNN–LSTM Network: 
-Error Growth and Cross-Year Robustness at 6–24 h Lead Times." 
+This repository is the code-only public release accompanying the *Atmosphere* paper
+"Multi-Horizon Typhoon Wind Field Prediction via a Lightweight CNN-LSTM Network:
+Error Growth and Cross-Year Robustness at 6-24 h Lead Times".
 
 It contains the core models, the fixed-t0 sample-construction logic, training and
 evaluation scripts, statistical-analysis code, and the plotting scripts used to produce
@@ -13,22 +13,36 @@ Center, respectively.
 
 ## Task
 
-Predict a local 31 x 31 two-component (u10/v10) wind field at 6 h, 12 h, or
-24 h from four historical hourly patches. The target is defined as 
-`Y_H = W(t0 + H, C(t0))`: the future ERA5 wind field is sampled on the
-geographic window anchored at the initialization-time storm center, not at 
-the future storm center, thereby avoiding future best-track leakage.
+Predict a local 31 x 31 two-component ($u_{10}$/$v_{10}$) wind field at 6 h, 12 h, or 24 h from
+four historical hourly patches. The target is defined as $Y_H = W(t_0 + H, C(t_0))$: the
+future ERA5 wind field is sampled on the geographic window anchored at the
+initialization-time storm center, not at the future storm center, thereby avoiding
+future best-track leakage.
 
 ## Data sources
 
-Users must obtain and prepare the data themselves, subject to their respective
-licences and access policies:
-
 - CMA best-track data
-- ERA5 reanalysis u10/v10 wind fields
+- ERA5 reanalysis $u_{10}$/$v_{10}$ wind fields
 
-No ERA5, CMA, model checkpoint, prediction NPZ, or manuscript
-result file is included in this repository.
+No ERA5, CMA, model checkpoint, prediction NPZ, or manuscript result file is included
+in this repository.
+
+## Repository layout
+
+- `data/README.md`: expected user-prepared dataset format.
+- `data/storm_lists.md` / `data/storm_lists.csv`: train/validation/test
+  tropical-cyclone identities and per-horizon fixed-t0 sample counts (Table S1 of
+  the manuscript).
+- `data_processing/`: best-track parsing, fixed-t0 patch construction, and
+  normalization.
+- `evaluation/`: RMSE, MAE, and WS-MAE metrics, prediction-NPZ evaluation, and
+  paired two-sided t-test statistics (Table 11).
+- `models/`: CNN-LSTM backbone, SE attention, MBFN, full STL-Net.
+- `models/baselines/`: the baseline architectures (CNN, LSTM, GRU, ConvLSTM,
+  Transformer, U-Net); run any module directly to verify its parameter count
+  against Table 5.
+- `train/`: training entry points for the 6-, 12-, and 24-h tasks.
+- `visualization/`: plotting scripts for the manuscript figures.
 
 ## Environment
 
@@ -38,56 +52,30 @@ result file is included in this repository.
 
 Install dependencies:
 
-```bash
-python -m pip install -r requirements.txt
 ```
-
-Install the CUDA-compatible PyTorch wheel appropriate for your operating system
-and CUDA driver if the generic `pip` command does not provide it.
-
-## Repository layout
-
-- `models/`: CNN-LSTM backbone, SE attention, MBFN, full STL-Net, 
-             and the baseline architectures (CNN, LSTM, GRU, ConvLSTM, Transformer, U-Net).
-- `data_processing/`: track cleaning, fixed-t0 patch construction, NPZ loading, and normalization.
-- `train/`: training entry points for 6 h, 12 h, and 24 h.
-- `evaluation/`: RMSE, MAE, WS-MAE/AWSE, and prediction-NPZ evaluation.
-- `visualization/`: Figures plotting scripts.
-- `data/README.md`: expected user-prepared dataset format.
+pip install -r requirements.txt
+```
 
 ## Data preparation
 
-Prepare the NPZ files described in [`data/README.md`](data/README.md). Training
-requires `X` `(N, 4, 2, 31, 31)` and `Y` `(N, 2, 31, 31)`, with a fixed
-2020--2021/train, 2022/validation, and 2023/test split. The Min--Max scaler is
-fitted from `X_train` and `Y_train` only. Validation selects the checkpoint by
-normalized MSE; the 2023 test split is evaluated only after training.
+1. Download the ERA5 10-m wind components and the CMA best-track archive.
+2. Use `data_processing/` to build the fixed-t0 NPZ datasets.
+3. See `data/README.md` for the expected file layout.
 
 ## Training
 
-Run from the repository root so package imports resolve:
+Default protocol: three random seeds (0, 42, and 2026); see the manuscript,
+Section 4.1.
 
-```bash
-python -m train.train_6h --data-dir data/datasets --output-dir outputs --seed 0
-python -m train.train_12h --data-dir data/datasets --output-dir outputs --seed 0
-python -m train.train_24h --data-dir data/datasets --output-dir outputs --seed 0
-```
-
-Default protocol: MSE loss, Adam (`lr=1e-3`, `weight_decay=0`), batch size 64,
-100 maximum epochs, ReduceLROnPlateau (factor 0.5, patience 5, min LR 1e-6),
-and early stopping patience 15.
+Ablation protocol: ten fixed random seeds (0, 1, 2, 3, 4, 5, 6, 7, 42, and 2026)
+were used for the ablation study in Section 5.4; run `train.py` once per seed with
+`--seed` set to each value.
 
 ## Evaluation
 
-Metrics are reported in m s^-1:
-
-- RMSE: component-wise root mean squared error.
-- MAE: component-wise mean absolute error.
-- WS-MAE / AWSE: mean absolute error of wind-speed magnitude.
-
-```bash
-python -m evaluation.evaluate outputs/6h/seed_0/test_predictions.npz
-```
+`evaluation/evaluate.py` computes RMSE, MAE, and WS-MAE from prediction NPZ files.
+`evaluation/paired_ttest.py` reproduces the paired two-sided Student's t-tests
+reported in Table 11 from per-seed test errors.
 
 ## Figures
 
@@ -101,12 +89,14 @@ The plotting scripts in `visualization/` correspond to the manuscript figures:
 Figures 1, 3, and 5 use values or schematic geometry defined in their scripts.
 Figure 4 intentionally requires user-prepared seed-0 prediction files at
 `results/6h/test_predictions.npz`, `results/12h/test_predictions.npz`, and
-`results/24h/test_predictions.npz`, because the repository does not publish prediction
-outputs or model checkpoints. Manuscript Figure 2 (STL-Net architecture schematic) is
-drawn separately and is not generated by a script.
+`results/24h/test_predictions.npz`, because the repository does not publish
+prediction outputs or model checkpoints. Manuscript Figure 2 (STL-Net architecture
+schematic) is drawn separately and is not generated by a script.
 
 ## Citation
 
-> Liu, J.; Cui, J.; Liu, Y. Multi-Horizon Typhoon Wind Field Prediction via a
-> Lightweight CNN-LSTM Network: Error Growth and Cross-Year Robustness at
-> 6-24 h Lead Times. *Atmosphere*, submitted (Manuscript ID: atmosphere-4519259).
+If you use this code, please cite:
+
+&gt; Liu, J.; Cui, J.; Liu, Y. Multi-Horizon Typhoon Wind Field Prediction via a
+&gt; Lightweight CNN-LSTM Network: Error Growth and Cross-Year Robustness at
+&gt; 6-24 h Lead Times. *Atmosphere*, submitted (Manuscript ID: atmosphere-4519259).
