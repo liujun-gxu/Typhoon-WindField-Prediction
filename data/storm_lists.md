@@ -133,8 +133,14 @@ forecast horizon. For the 24-h forecasting task, only 23 of the 24 validation st
 
 ## Per-sample indices
 
-Per-sample indices (`sample_id`, `storm_uid`, `t0`, `target_time`) are not distributed
-directly, but are reconstructed deterministically by `data_processing/prepare_tracks.py`
-from the storm lists given here. The training pipeline emits one metadata CSV per split
-with exactly these columns (see the `test_predictions_metadata.csv` produced by the
-training scripts for the format).
+Per-sample indices are not distributed directly, but are reconstructed
+deterministically by `data_processing/prepare_tracks.py` from the storm lists given
+here. The training pipeline emits one metadata CSV per split with the following columns:
+
+```text
+sample_id, storm_uid, t0, target_time, split, horizon_h
+CMA-2020-01_20200613T18, CMA-2020-01, 2020-06-13T18:00:00, 2020-06-14T00:00:00, train, 6
+```
+
+where `<i>t</i><sub>0</sub>` is the initialization timestamp of the sample and `target_time` is `<i>t</i><sub>0</sub> + <i>H</i>`
+for the corresponding forecast horizon.
