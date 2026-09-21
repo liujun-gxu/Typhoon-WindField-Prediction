@@ -31,12 +31,12 @@ in this repository.
 
 - `data/README.md`: expected user-prepared dataset format.
 - `data/storm_lists.md` / `data/storm_lists.csv`: train/validation/test
-  tropical-cyclone identities and per-horizon fixed-t0 sample counts (Table S1 of
+  tropical-cyclone identities and per-horizon fixed-<i>t</i><sub>0</sub> sample counts (Table S1 of
   the manuscript).
-- `data_processing/`: best-track parsing, fixed-t0 patch construction, and
+- `data_processing/`: best-track parsing, fixed-<i>t</i><sub>0</sub> patch construction, and
   normalization.
 - `evaluation/`: RMSE, MAE, and WS-MAE metrics, prediction-NPZ evaluation, and
-  paired two-sided t-test statistics (Table 11).
+  paired two-sided <i>t</i>-test statistics (Table 11).
 - `models/`: CNN-LSTM backbone, SE attention, MBFN, full STL-Net.
 - `models/baselines/`: the baseline architectures (CNN, LSTM, GRU, ConvLSTM,
   Transformer, U-Net); run any module directly to verify its parameter count
